@@ -4,7 +4,6 @@ from positional_encoding import PositionalEncoding
 class Transformer(nn.Module):
 
     #input var
-
     def __init__(self,
                  num_input_variables,
                  dim_val,
@@ -19,6 +18,8 @@ class Transformer(nn.Module):
                  decoder_num_heads,
                  decoder_activation
                  ):
+
+        super().__init__()
 
         self.encoder_input_layer = nn.Linear(
             in_features = num_input_variables,
@@ -55,3 +56,48 @@ class Transformer(nn.Module):
             decoder_layer=decoder_layer,
             num_layers=decoder_num_layers
         )
+
+        self.linear_mapping = nn.Linear(
+            in_features=dim_val,
+            out_features=1
+        )
+
+
+        def forward(self, source, target, source_mask, target_mask):
+            source = self.encoder_input_layer(source)
+            source = self.positional_encoding(source)
+            source = self.encoder(src = source)
+            target = self.decoder_input_layer(target)
+            target = self.decoder(
+                tgt=target,
+                memory=source,
+                tgt_mask = target_mask,
+                memory_mask =source_mask
+            )
+            target = self.linear_mapping(target)
+
+            return target
+
+
+dim_val = 512
+n_heads = 8
+n_decoder_layers = 4
+n_encoder_layers = 4
+input_size = 1
+
+model = Transformer(
+    num_input_variables=1,
+    dim_val=dim_val,
+    encoder_dim_feedforward_d_model_scalar=5,
+    encoder_dropout=.3,
+    encoder_num_layers=n_encoder_layers,
+    encoder_activation="relu",
+    encoder_num_heads= n_heads,
+    decoder_dim_feedforward_d_model_scalar=5,
+    decoder_dropout=.3,
+    decoder_num_layers=n_decoder_layers,
+    decoder_num_heads= n_heads,
+    decoder_activation="relu",
+)
+
+print(model)
