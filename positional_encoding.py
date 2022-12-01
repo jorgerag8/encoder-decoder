@@ -8,7 +8,7 @@ class PositionalEncoding(
     nn.Module,
 ):
     # needs to go at the bottom of the encoder and decoder stacks
-    def __init__(self, d_model, dropout: float = 0.1, max_len: int = 3000):
+    def __init__(self, d_model, dropout: float = 0.1, max_len: int = 703):
         super().__init__()
 
         # Hyperparameter: to introduce regularization that prevents against overfitting
@@ -23,5 +23,5 @@ class PositionalEncoding(
         self.register_buffer("pe", pe)
 
     def forward(self, x):
-        x = x + self.pe[: x.size(0), :].requires_grad_(False)
+        x = x + self.pe[: x.size(0), :].requires_grad_(True)
         return self.dropout(x)
