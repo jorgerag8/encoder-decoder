@@ -1,14 +1,14 @@
 import torch
 import math
 import torch.nn as nn
-from torch import nn, Tensor
+from torch import nn
 
 
 class PositionalEncoding(
     nn.Module,
 ):
     # needs to go at the bottom of the encoder and decoder stacks
-    def __init__(self, d_model, dropout: float = 0.1, max_len: int = 5000):
+    def __init__(self, d_model, dropout: float = 0.1, max_len: int = 3000):
         super().__init__()
 
         # Hyperparameter: to introduce regularization that prevents against overfitting
